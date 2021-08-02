@@ -1,0 +1,61 @@
+{% extends 'home_page.html' %}
+
+{% block doc_title %}
+<title>Track Transport System (Admin dashboard)</title>
+{% endblock %}
+
+{% block styles %}
+<style>
+.footer{
+    margin-top: 10vh;
+    height: 15vh;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+{% endblock %}
+{% block main_block %}
+
+<div style="background-color: black;" class="nav">
+    <h3 id="logo"><span style="color: #fff;">Truck Transport</span> System</h3>
+    <a  onclick="document.getElementById('id02').style.display='block'" >{{user.first_name}}</a>
+</div>
+
+<div class="body_dashboard">
+    <div class="side_bar">
+        <ul>
+            <li class="side_bar_active">Imizigo</li>
+            <li>Andika umuzigo</li>
+        </ul>
+    </div>
+    <div class="dashboard">
+        
+<table class="table">
+  <caption>IMIZIGO</caption>
+  <thead>
+    <tr>
+      <th scope="col">Nomero</th>
+      <th scope="col">Taliki</th>
+      <th scope="col">Kurikirana</th>
+      <!-- <th scope="col">Period</th> -->
+    </tr>
+  </thead>
+  <tbody>
+    {% for delivery in deliveries %}
+    <tr>
+      <td data-label="Nomero y'umuzigo">Visa - 3412</td>
+      <td data-label="Igihe ugomba guhagurukira">04/01/2016</td>
+      <td data-label="Aho umuzigo ugeze">$1,190</td>
+      <!-- <td data-label="Period">03/01/2016 - 03/31/2016</td> -->
+    </tr>
+    {% endfor %}
+   
+  </tbody>
+</table>
+    </div>
+
+</div>
+
+{% endblock %}

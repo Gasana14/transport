@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/85681c5f1c.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    {% block doc_title %}
+    <title>Track Transport System</title>
+    {% endblock %}
+    {% block css_files %}
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% endblock %}
+    {% block styles %}
+    {% endblock %}
+</head>
+<body>
+
+
+
+
+    <div class="main">
+
+{% if messages %}
+        {% for message in messages %}
+            <div class="alert">
+                  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                  <strong>{{message.level_tag }}!</strong> {{message}}
+                </div>
+        {% endfor %}
+    {% endif %}
+
+
+
+
+    <div id="id02" class="w3-modal">
+        <div class="w3-modal-content w3-card-4">
+          <header class="w3-container" style="background-color: #ED9D03; color: #fff;"> 
+            <span onclick="document.getElementById('id02').style.display='none'" 
+            class="w3-button w3-display-topright">&times;</span>
+            <h2 style="text-transform: capitalize;">{{user.first_name}}</h2>
+          </header>
+          <div class="w3-container">
+
+            <div class="tool_nav">
+                <ul id="profile_nav">
+                    <li class="auth_nav_list_active" id="profile_button_nav">Umwirondoro</li>
+                    <li id="logout_button_nav" >Sohoka</li>
+                    <!-- <li id="driverTabButton">Driver</li> -->
+                </ul>
+            </div>
+          
+           <div class="modal_container">
+               
+               
+            <div class="tab" id="change_profile">
+
+                <form  action="">
+                    
+                    <input type="email" placeholder="Imeri">
+                    
+                    <input type="password" placeholder="Ijambo banga">
+                    <div class="action_buttons">
+                        <!-- <a id="customer_register_button" class="auth_button_vaigation" >Register</a> -->
+                        <button type="button" class="auth_button" >OHEREZA</button>
+                    </div>
+                </form>
+                    
+               </div>
+               <div class="tab" id="logout_form">
+
+                <form method="POST"  action="{% url 'logout' %}">
+                   {% csrf_token %}
+                    <div class="action_buttons">
+                        <!-- <a id="customer_register_button" class="auth_button_vaigation" >Register</a> -->
+                        <button type="submit" class="auth_button" id="admin_login_button_one">SOHOKA</button>
+                    </div>
+                </form>
+                    
+               </div>
+                
+            </div>
+           </div>
+          </div>
+          <!-- <footer class="w3-container w3-teal">
+            <p>Modal Footer</p>
+          </footer> -->
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+        <div id="id01" class="w3-modal">
+            <div class="w3-modal-content w3-card-4">
+              <header class="w3-container" style="background-color: #ED9D03; color: #fff;"> 
+                <span onclick="document.getElementById('id01').style.display='none'" 
+                class="w3-button w3-display-topright">&times;</span>
+                <h2>Authenticate first.</h2>
+              </header>
+              <div class="w3-container">
+               <div class="tool_nav">
+                   <ul id="auth_nav_list">
+                       <li class="auth_nav_list_active" id="adminTabButton">Admin</li>
+                       <li id="clientTabButton" >Client</li>
+                       <li id="driverTabButton">Driver</li>
+                   </ul>
+               </div>
+               <div class="modal_container">
+                   <div class="tab" id="login_admin">
+
+                    <form id="admin_login_form" action="">
+                        <input type="email" placeholder="Imeri">
+                        
+                        <input type="password" placeholder="Ijambo banga">
+                        <div class="action_buttons">
+                            <!-- <a id="customer_register_button" class="auth_button_vaigation" >Register</a> -->
+                            <button type="button" class="auth_button" id="admin_login_button_one">OHEREZA</button>
+                        </div>
+                    </form>
+                        
+                   </div>
+                   <div class="tab" id="authenticate_client">
+                            <form id="customer_login_form" method="POST" action="{% url 'login_client' %}" >
+                                {% csrf_token %}
+                                <input name="email" type="email" placeholder="Imeri">
+                                
+                                <input name="password" type="password" placeholder="Ijambo banga">
+                                <div class="action_buttons">
+                                    <a id="customer_register_button" class="auth_button_vaigation" >Iyandikishe</a>
+                                    <button type="submit" class="auth_button" id="customer_login_button_one">OHEREZA</button>
+                                </div>
+                            </form>
+                            <form id="customer_register_form" method="post" action="{% url 'register' %}">
+                                {% csrf_token %}
+                                <input name="email" type="email" placeholder="Imeri">
+                                <input name="phone" type="text" placeholder="Telefone">
+                                <input name="is_customer" type="text" value="is_customer" hidden>
+                                <input type="text" value="not_admin" name="is_admin" hidden>
+                                <input name="password" type="password" placeholder="Ijambo banga">
+                                <div class="action_buttons">
+                                    <a class="auth_button_vaigation" id="customer_login_button" >Injira muri konti</a>
+                                    <button type="submit" class="auth_button" id="customer_register_button_two">OHEREZA</button>
+                                </div>
+                            </form>
+                   </div>
+                   <div class="tab" id="authenticate_driver">
+                    <form id="driver_login_form" action="{% url 'login_driver' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="email" name="email" placeholder="Imeri">
+                        
+                        <input type="password" name="password" placeholder="Ijambo banga">
+                        <div class="action_buttons">
+                            <a id="driver_register_button" class="auth_button_vaigation" >Iyandikishe</a>
+                            <button type="submit" class="auth_button" id="driver_login_button_two">OHEREZA</button>
+                        </div>
+                    </form>
+                    <form id="driver_register_form" action="register" method="POST">
+                       {% csrf_token %}
+                        <input type="email" name="email" placeholder="Imeri">
+                        <input type="text" name="phone" placeholder="Telefone">
+                        <input type="text" name="is_customer" value="not_customer" hidden>
+                        <input type="text" name="is_admin" value="not_admin" hidden>
+                        <label style="color: #8a8a88;">Umubare wibinyabiziga utunze.</label>
+                        <input min="1" max="10" name="vehicles" type="number" value="1">
+                        <!-- <button type="button" id="add_car">
+                            Add Vehicle <i class="fas fa-car"></i>
+                        </button> -->
+                        <input type="password" name="password" placeholder="Ijambo banga">
+
+                        <div class="action_buttons">
+                            <a class="auth_button_vaigation" id="driver_login_button" >Injira muri konti</a>
+                            <button type="submit" class="auth_button" id="driver_register_button_two">OHEREZA</button>
+                        </div>
+                    </form>
+                   </div>
+               </div>
+              </div>
+              <!-- <footer class="w3-container w3-teal">
+                <p>Modal Footer</p>
+              </footer> -->
+            </div>
+          </div>
+        </div>
+
+
+
+{% block main_block %}
+
+        <section class="banner">
+        
+                <div class="nav">
+                    <h3 id="logo"><span>Truck Transport</span> System</h3>
+                    <a  onclick="document.getElementById('id01').style.display='block'" >Login</a>
+                </div>
+                <div class="banner_text">
+                    <p >Urubuga ruhuza abacuruzi , abaguzi
+                        n’abikorezi b’ibicuruzwa.</p>
+                </div>           
+            
+        </section>
+        <section class="body">
+            <h4>Abikorezi dukorana nabo</h4>
+            <div class="profiles">
+                <div class="card">
+                    <div class="crad_img">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrjzfCh8IdcSA-LnFQ7NRXuDrdhHF6jCpEAQ&usqp=CAU" alt="">
+                    </div>
+                    <div class="crad_details">
+                        <p>Kamali Pierre  12/01/2021</p>
+                        <p>Ikinyabiziga:   Toyota E</p>
+                        <p>Umubare :       2</p>
+                    </div>
+                    <div class="crad_description">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, perferendis.
+                        Lorem ipsum dolor, sit amet consectetur adipisicing.
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="crad_img">
+                        <img src="https://images.unsplash.com/photo-1534011056808-50c1c6082fe7?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bWluaSUyMGJ1c3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80" alt="">
+                    </div>
+                    <div class="crad_details">
+                        <p>Kamali Pierre  12/01/2021</p>
+                        <p>Ikinyabiziga:   Toyota E</p>
+                        <p>Umubare :       2</p>
+                    </div>
+                    <div class="crad_description">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, perferendis.
+                        Lorem ipsum dolor, sit amet consectetur adipisicing.
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="crad_img">
+                        <img src="https://3.imimg.com/data3/OV/VI/MY-9370836/motor-cycle-delivery-box-500x500.jpeg" alt="">
+                    </div>
+                    <div class="crad_details">
+                        <p>Kamali Pierre  12/01/2021</p>
+                        <p>Ikinyabiziga:   Toyota E</p>
+                        <p>Umubare :       2</p>
+                    </div>
+                    <div class="crad_description">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, perferendis.
+                        Lorem ipsum dolor, sit amet consectetur adipisicing.
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endblock %}
+        <footer class="footer">
+            <i  class="fab fa-facebook-f"></i>
+            <i  class="fab fa-twitter"></i>
+            <i  class="fas fa-envelope"></i>
+        </footer>
+
+    </div>
+    {% block javascript %}
+        <script src="{% static 'js/main.js' %}" ></script>
+    {% endblock %}
+</body>
+</html>

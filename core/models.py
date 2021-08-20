@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.crypto import get_random_string
 # Create your models here.
 
 DELIVERY_STATUS = (
@@ -18,6 +19,9 @@ class Driver(models.Model):
     account = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     phone = models.CharField(max_length=20)
     active = models.BooleanField(default=False)
+    # number_of_cars = models.IntegerField(default=1)
+    # transport_capacity = models.IntegerField(default=1)
+    description = models.TextField(default="Service nziza niyo ntego.")
 
 
 class Delivery(models.Model):
@@ -32,6 +36,12 @@ class Delivery(models.Model):
     destination = models.CharField(max_length=100, null=False)
     origin = models.CharField(max_length=100, null=False)
     price = models.IntegerField(default=500)
+
+    def save(self, *args, **kwargs):
+        self.status = "W"
+        pk = Delivery.objects.all().count()
+        self.number = f"{get_random_string(8).upper()}-{pk}"
+        super(Delivery, self).save(*args, **kwargs)
 
 
 class Product(models.Model):

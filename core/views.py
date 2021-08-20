@@ -13,6 +13,14 @@ def home_page(request):
     return render(request, 'home_page.html')
 
 
+def login_page(request):
+    return render(request, 'login_page.html')
+
+
+def register_page(request):
+    return render(request, 'register_page.html')
+
+
 @login_required
 def admin_dashboard(request):
     return render(request, 'admin_dashboard.html')
@@ -27,8 +35,44 @@ def customer_dashboard(request):
         return redirect('home')
     else:
         deliveries = Delivery.objects.filter(owner=client)
-
+        print(deliveries)
     return render(request, 'customer_dashboard.html', {"deliveries": deliveries})
+
+
+@login_required
+def record_new_carriage(request):
+    user = request.user
+
+    if request.method == 'GET':
+        client = Customer.objects.get(account=user)
+        if client is None:
+            messages.error(request, 'Not a client account')
+            return redirect('home')
+        else:
+            # deliveries = Delivery.objects.filter(owner=client)
+            return render(request, 'new_carriage.html')
+    else:
+        user = request.user
+        owners = Customer.objects.filter(account=user)
+        if owners.exists():
+            departure_date_time = request.POST.get('departure_date_time')
+            arrival_date_time = request.POST.get('arrival_date_time')
+            kilograms = request.POST.get('kilograms')
+            destination = request.POST.get('destination')
+            origin = request.POST.get('origin')
+            price = request.POST.get('price')
+
+            Delivery.objects.create(owner=owners[0],
+                                    departure_date_time=departure_date_time,
+                                    arrival_date_time=arrival_date_time,
+                                    kilograms=kilograms,
+                                    destination=destination,
+                                    origin=origin,
+                                    price=price)
+            return redirect('customer_dashboard')
+        else:
+            messages.error(request, 'You do not have a customer account.')
+            return redirect('record_new_carriage')
 
 
 @login_required
@@ -40,7 +84,7 @@ def driver_dashboard(request):
         return redirect('home')
     else:
 
-        deliveries = Delivery.objects.filter(status='W')
+        deliveries = Delivery.objects.filter(status='W').order_by('departure_date_time')
 
     return render(request, 'driver_dashboard.html', {"deliveries": deliveries})
 
@@ -130,17 +174,17 @@ def login_client(request):
             customer = Customer.objects.get(account=user)
             if customer is None:
                 messages.error(request, 'Not a client account.')
-                return redirect('home')
+                return redirect('login_page')
             else:
                 login(request, user)
                 messages.success(request, f' Welcome {user.first_name}.')
                 return redirect('customer_dashboard')
         else:
             messages.error(request, 'Credentials provided are not correct.')
-            return redirect('home')
+            return redirect('login_page')
 
     else:
-        return redirect('home')
+        return redirect('login_page')
 
 
 def login_driver(request):

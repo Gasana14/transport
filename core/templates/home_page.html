@@ -7,6 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/85681c5f1c.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    {% block css_block %}
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"> -->
+{% endblock %}
+
     {% block doc_title %}
     <title>Track Transport System</title>
     {% endblock %}
@@ -120,7 +124,7 @@
                         <input type="password" placeholder="Ijambo banga">
                         <div class="action_buttons">
                             <!-- <a id="customer_register_button" class="auth_button_vaigation" >Register</a> -->
-                            <button type="button" class="auth_button" id="admin_login_button_one">OHEREZA</button>
+                            <a type="button" class="auth_button" id="admin_login_button_one">OHEREZA</a>
                         </div>
                     </form>
                         
@@ -192,11 +196,13 @@
 
 {% block main_block %}
 
+
+
         <section class="banner">
         
                 <div class="nav">
                     <h3 id="logo"><span>Truck Transport</span> System</h3>
-                    <a  onclick="document.getElementById('id01').style.display='block'" >Login</a>
+                    <a href="{% url 'login_page' %}"  onclick="document.getElementById('id0').style.display='block'" >Login</a>
                 </div>
                 <div class="banner_text">
                     <p >Urubuga ruhuza abacuruzi , abaguzi

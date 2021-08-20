@@ -1,0 +1,144 @@
+{% extends 'home_page.html' %}
+
+{% block css_block %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+{% endblock %}
+{% block main_block %}
+<!-- <section class="banner">
+        
+    <div class="nav">
+        <h3 id="logo"><span>Truck Transport</span> System</h3>
+        <a href="{% url 'login_page' %}"  onclick="document.getElementById('id0').style.display='block'" >Login</a>
+    </div> -->
+    <!-- <div class="banner_text">
+        <p >Urubuga ruhuza abacuruzi , abaguzi
+            n’abikorezi b’ibicuruzwa.</p>
+    </div>            -->
+
+<!-- </section> -->
+
+<section class="container">
+ <br>
+ <br>
+ <br>
+    <div class="row">
+        <div class="col">
+
+        </div>
+        <div class="col">
+            <h3>Injira (Customer)</h3>
+            <form id="customer_login_form" method="POST" action="{% url 'login_client' %}" >
+                {% csrf_token %}
+                <input class="form-control" name="email" type="email" placeholder="Imeri">
+                <br>
+                <input class="form-control" name="password" type="password" placeholder="Ijambo banga">
+                <br>
+                <div class="action_buttons">
+                    <!-- <a id="customer_register_button" class="auth_button_vaigation" >Iyandikishe</a> -->
+                    <button type="submit" class="auth_button" id="customer_login_button_one">OHEREZA</button>
+                </div>
+                <br>
+                    <br>
+            </form>
+        </div>
+        <div class="col">
+            
+        </div>
+    </div>
+   
+
+    <div class="row">
+        <div class="col">
+
+        </div>
+        <div class="col">
+            <h3>Iyandikishe (Customer)</h3>
+
+            <form id="customer_register_form" method="post" action="{% url 'register' %}">
+                {% csrf_token %}
+                <input class="form-control" name="email" type="email" placeholder="Imeri">
+                <br>
+                <input class="form-control" name="phone" type="text" placeholder="Telefone">
+                <br>
+                <input class="form-control" name="is_customer" type="text" value="is_customer" hidden>
+                <br>
+                <input class="form-control" type="text" value="not_admin" name="is_admin" hidden>
+                <br>
+                <input class="form-control" name="password" type="password" placeholder="Ijambo banga">
+                <br>
+                <div class="action_buttons">
+                    <!-- <a class="auth_button_vaigation" id="customer_login_button" >Injira muri konti</a> -->
+                    <button type="submit" class="auth_button" id="customer_register_button_two">OHEREZA</button>
+                </div>
+                <br>
+                    <br>
+            </form>
+        </div>
+        <div class="col">
+
+        </div>
+    </div>
+    
+    <div class="row">
+            <div class="col">
+
+            </div>
+            <div class="col">
+                <h3>Injira (Driver))</h3>
+                <form id="driver_login_form" action="{% url 'login_driver' %}" method="POST">
+                    {% csrf_token %}
+                    <input class="form-control" type="email" name="email" placeholder="Imeri">
+                    <br>
+                    <input class="form-control" type="password" name="password" placeholder="Ijambo banga">
+                    <br>
+                    <div class="action_buttons">
+                        <a id="driver_register_button" class="auth_button_vaigation" >Iyandikishe</a>
+                        <button type="submit" class="auth_button" id="driver_login_button_two">OHEREZA</button>
+                    </div>
+                    <br>
+                    <br>
+                </form>
+            </div>
+            <div class="col">
+
+            </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+        </div>
+        <div class="col">
+            <h3>Iyandikishe (Driver)</h3>
+            <form id="customer_register_form" method="post" action="{% url 'register' %}">
+                {% csrf_token %}
+                <input class="form-control" name="email" type="email" placeholder="Imeri">
+                <br>
+                <input class="form-control" name="phone" type="text" placeholder="Telefone">
+                <br>
+                <input class="form-control" name="is_customer" type="text" value="is_driver" hidden>
+                <!-- <br> -->
+                <input class="form-control" type="text" value="not_admin" name="is_admin" hidden>
+                <br>
+                <input class="form-control" name="password" type="password" placeholder="Ijambo banga">
+                <br>
+                <input required type="text" name="vehicles" value="1" type="number" placeholder="Umubare w'ibinyabiziga" class="form-control">
+                <br>
+                <div class="action_buttons">
+                    <!-- <a class="auth_button_vaigation" id="customer_login_button" >Injira muri konti</a> -->
+                    <button type="submit" class="auth_button" id="customer_register_button_two">OHEREZA</button>
+                </div>
+                <br>
+                    <br>
+            </form>
+        </div>
+        <div class="col">
+
+        </div>
+
+</div>
+
+    
+</section>
+{% endblock %}

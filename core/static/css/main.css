@@ -134,7 +134,8 @@ a{
     flex: 3;
     border: rgb(146, 145, 145) solid 2px;
     margin: 20px;
-    height: 80vh;
+    min-height: 80vh; 
+    /* overflow-y: scroll; */
 }
 
 .body h4{

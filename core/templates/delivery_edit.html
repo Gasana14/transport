@@ -1,0 +1,121 @@
+{% extends 'customer_dashboard.html' %}
+
+{% block  customer_dashboard_block %}
+
+<div class="row">
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-6">
+        <br>
+            <br>
+               
+            <br>
+            <br>
+            <form method="POST" action="{% url 'delivery_edit' pk=delivery.pk %}">
+                {% csrf_token %}
+                <h3 style="text-align: center;">Umuzigo wawe</h3>
+                <label for="">Italiki n'isaha umuzigo uzafatirwa</label>
+                <p id="time1" style="color: rgb(73, 73, 250);">{{delivery.departure_date_time}}</p>
+                <p style="color: rgb(73, 73, 250); cursor: pointer;" class="edit_time"> Edit</p>
+                <input hidden required class="form-control" id="depart-date" type="datetime-local" value="{{delivery.departure_date_time|date:'Y-m-d'}}T{{delivery.departure_date_time|time:'H:i'}}" name="departure_date_time" id="">
+                <br>
+                <label for="">Italiki n'isaha ugomba kukugereraho</label>
+                <p id="time2" style="color: rgb(73, 73, 250);">{{delivery.arrival_date_time}}</p>
+                <p style="color: rgb(73, 73, 250); cursor: pointer;" class="edit_time"> Edit</p>
+              
+                <input hidden required class="form-control" id="arrival-date" value="{{delivery.arrival_date_time|date:'Y-m-d'}}T{{delivery.arrival_date_time|time:'H:i'}}" type="datetime-local" name="arrival_date_time" id="">
+                <br>
+                
+                <label for="">Ibiro by'umuzigo</label>
+                <input required class="form-control" value="{{delivery.kilograms}}" type="number" name="kilograms" id="">
+                <br>
+                <label for="">Aho umuzikgo uvuye</label>
+                <input required class="form-control" value="{{delivery.origin}}" name="origin" type="text">
+                <br>
+                <label for="">Aho umuzigo ujya</label>
+                <input required type="text" class="form-control" value="{{delivery.destination}}" name="destination">
+                <br>
+                <!-- <br> -->
+                <label for="">Igiciro</label>
+                <input required type="number" value="{{delivery.price}}" name="price" class="form-control">
+                <br>
+                <br>
+                <label for="">Hidura stati</label>
+                <ul>
+                    {% if delivery.status == 'W' %}
+                    <li> Hisha Ubusabe <input type="checkbox" value="D" name="status1" id=""> </li>
+                    {% elif delivery.status == 'D' %}
+                    <li> Tangaza Ubusabe <input type="checkbox" value="W" name="status2" id=""> </li>
+                    {% endif %}
+                </ul>
+                <div hidden id="googleMap" style="width:100%;height:400px;"></div>
+                <br>
+                <div class="action_buttons">
+                    <!-- <a id="customer_register_button" class="auth_button_vaigation" >Iyandikishe</a> -->
+                    <button type="submit" class="auth_button" id="customer_login_button_one">OHEREZA</button>
+                </div>
+                <br>
+                <br>
+                <hr>
+                <h4 style="text-align: center;">Abifuza gutwara umuzigo wawe ({{list_of_drivers|length}})</h4>
+                <ul>
+                    {% for driver in list_of_drivers %}
+                     {% if forloop.counter < 3 %}
+                     <li> <a href=""> {{driver.account.first_name}} : {{driver.phone}}</a> </li>
+                    {% elif forloop.counter == 3 %}
+                    <li><a style="text-decoration: none;" href="">Abandi ...</a></li>
+                    {% endif %}
+                  
+                    {% endfor %}
+                    
+                 
+                </ul>
+            </form>
+    </div>
+    <div class="col-md-3">
+
+    </div>
+</div>
+
+
+<script>
+    const buttons = document.querySelectorAll('.edit_time')
+    buttons[0].addEventListener('click', ()=>{
+        if (document.getElementById('depart-date').hidden==false){
+            document.getElementById('depart-date').hidden = true
+            buttons[0].innerHTML = 'Edit'
+            buttons[0].style.color="rgb(73, 73, 250)"
+
+        }else{
+            document.getElementById('depart-date').hidden = false
+            buttons[0].innerHTML = 'Close'
+            buttons[0].style.color="red"
+        }
+    })
+    buttons[1].addEventListener('click', ()=>{
+        if (document.getElementById('arrival-date').hidden==false){
+            document.getElementById('arrival-date').hidden = true
+            buttons[1].innerHTML = 'Edit'
+            buttons[1].style.color="rgb(73, 73, 250)"
+
+        }else{
+            document.getElementById('arrival-date').hidden = false
+            buttons[1].innerHTML = 'Close'
+            buttons[1].style.color="red"
+        }
+    })
+
+    document.getElementById('arrival-date').addEventListener('change', ()=>{
+        console.log("Hello")
+        document.getElementById('time2').innerHTML=document.getElementById('arrival-date').value
+    })
+
+    document.getElementById('depart-date').addEventListener('change', ()=>{
+    
+        document.getElementById('time1').innerHTML=document.getElementById('depart-date').value
+    })
+</script>
+
+
+{% endblock %}

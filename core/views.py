@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from .forms import RegistrationForm, VehicleForm
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Customer, Vehicle, Driver, Delivery
+from .models import Customer, Vehicle, Driver, Delivery, DriverWaitingList
 from django.utils.crypto import get_random_string
 # Create your views here.
 
@@ -34,27 +34,55 @@ def customer_dashboard(request):
         messages.error(request, 'Not a client account')
         return redirect('home')
     else:
-        deliveries = Delivery.objects.filter(owner=client)
+        deliveries = Delivery.objects.filter(owner=client).order_by('-departure_date_time')
         print(deliveries)
     return render(request, 'customer_dashboard.html', {"deliveries": deliveries})
+
+
+def delivery_edit(request, pk):
+    user = request.user
+    client = Customer.objects.get(account=user)
+    if client is None:
+        messages.error(request, 'Not a client account')
+        return redirect('home')
+    else:
+        if request.method == "GET":
+            delivery = Delivery.objects.get(pk=pk)
+            driver_list = DriverWaitingList.objects.filter(delivery=delivery)
+            list_of_drivers = [list_row.driver for list_row in driver_list]
+            print(list_of_drivers)
+            return render(request, 'delivery_edit.html', {"delivery": delivery, "list_of_drivers": list_of_drivers})
+        else:
+            delivery = Delivery.objects.get(pk=pk)
+            delivery.departure_date_time = request.POST.get('departure_date_time')
+            delivery.arrival_date_time = request.POST.get('arrival_date_time')
+            delivery.kilograms = request.POST.get('kilograms')
+            delivery.destination = request.POST.get('destination')
+            delivery.origin = request.POST.get('origin')
+            delivery.price = request.POST.get('price')
+            if request.POST.get('status1') :
+                delivery.status = 'D'
+            if request.POST.get('status2'):
+                delivery.status = 'W'
+
+            delivery.save()
+
+            return redirect('customer_dashboard')
 
 
 @login_required
 def record_new_carriage(request):
     user = request.user
-
-    if request.method == 'GET':
-        client = Customer.objects.get(account=user)
-        if client is None:
-            messages.error(request, 'Not a client account')
-            return redirect('home')
-        else:
+    client = Customer.objects.get(account=user)
+    if client is None:
+        messages.error(request, 'Not a client account')
+        return redirect('home')
+    else:
+        if request.method == 'GET':
             # deliveries = Delivery.objects.filter(owner=client)
             return render(request, 'new_carriage.html')
-    else:
-        user = request.user
-        owners = Customer.objects.filter(account=user)
-        if owners.exists():
+        else:
+
             departure_date_time = request.POST.get('departure_date_time')
             arrival_date_time = request.POST.get('arrival_date_time')
             kilograms = request.POST.get('kilograms')
@@ -62,7 +90,7 @@ def record_new_carriage(request):
             origin = request.POST.get('origin')
             price = request.POST.get('price')
 
-            Delivery.objects.create(owner=owners[0],
+            Delivery.objects.create(owner=client,
                                     departure_date_time=departure_date_time,
                                     arrival_date_time=arrival_date_time,
                                     kilograms=kilograms,
@@ -70,15 +98,33 @@ def record_new_carriage(request):
                                     origin=origin,
                                     price=price)
             return redirect('customer_dashboard')
+
+
+@login_required()
+def ask_to_deliver(request, delivery_id):
+    if request.method == 'POST':
+        user = request.user
+        driver = Driver.objects.filter(account=user).first()
+        if driver is None:
+            messages.error(request, 'Not a driver account')
+            return redirect('home')
         else:
-            messages.error(request, 'You do not have a customer account.')
-            return redirect('record_new_carriage')
+
+            delivery = Delivery.objects.get(id=delivery_id)
+            in_the_list = DriverWaitingList.objects.filter(delivery=delivery, driver=driver).exists()
+            if in_the_list:
+                messages.info(request, 'Musanze muri kuri list!')
+                return redirect('driver_dashboard')
+            else:
+                DriverWaitingList.objects.create(driver=driver, delivery=delivery)
+                messages.success(request, 'Ibyo wasbye bya tambukijwe, mutegereze igisubizo.')
+                return redirect('driver_dashboard')
 
 
 @login_required
 def driver_dashboard(request):
     user = request.user
-    driver = Driver.objects.get(account=user)
+    driver = Driver.objects.filter(account=user).first()
     if driver is None:
         messages.error(request, 'Not a driver account')
         return redirect('home')
@@ -103,6 +149,17 @@ def driver_missions(request):
 
     return render(request, 'driver_missions.html', {"deliveries": deliveries})
 
+
+def delivery_details(request, pk):
+    user = request.user
+    driver = Driver.objects.get(account=user)
+    if driver is None:
+        messages.error(request, 'Not a driver account. \n Login first!')
+        return redirect('home')
+    else:
+        delivery = Delivery.objects.get(pk=pk)
+        is_on_the_list = DriverWaitingList.objects.filter(driver=driver, delivery=delivery).exists()
+        return render(request, 'delivery_details.html', {"delivery": delivery, "is_on_the_list": is_on_the_list})
 
 def register_account(request):
 
@@ -207,3 +264,5 @@ def login_driver(request):
 
     else:
         return redirect('home')
+
+

@@ -13,5 +13,8 @@ urlpatterns = [
     path('customer_login', views.login_client, name="login_client"),
     path('driver_login', views.login_driver, name="login_driver"),
     path('driver_missions', views.driver_missions, name="driver_missions"),
-    path('register_page', views.register_page, name="register_page")
+    path('register_page', views.register_page, name="register_page"),
+    path('delivery_details/<int:pk>', views.delivery_details, name='delivery_details'),
+    path('delivery_edit/<int:pk>', views.delivery_edit, name='delivery_edit'),
+    path('ask_to_deliver/<int:delivery_id>', views.ask_to_deliver, name="ask_to_deliver")
 ]

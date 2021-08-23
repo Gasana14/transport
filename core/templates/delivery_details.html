@@ -1,0 +1,47 @@
+{% extends 'driver_dashboard.html' %}
+
+{% block driver_dashboard_block %}
+<br>
+<br>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <h3 style="text-align: center;">UMUZIGO N0: <i>{{delivery.number}}</i></h3>
+                <br>
+                <div class="row">
+                    <div class="col">
+                        <p class="details">Niyumuzigo: <span style="color: brown;">{{delivery.owner.account}}</span> </p>
+                        <p class="details">Italiki byatangajwe: {{delivery.date|date:"Y/m/d"}}</p>
+                        <p class="details">Igiciro : {{delivery.price}} Frw</p>
+                        <p class="details">Ibiro by'umuzigo: {{delivery.show_kilograms}}</p>
+                        
+                    </div>
+                    <div class="col">
+                        <p class="details">Nifuza ko muntwarira umuzigo taliki <b>{{delivery.departure_date_time|date:"Y/m/d"}}</b> Isaha: <b>{{delivery.departure_date_time|time:"H:i"}}</b>.
+                            <br>
+                            Umuzigo uzaba uturutse <b>{{delivery.origin}}</b>, ujya <b>{{delivery.destination}}</b>.
+                        </p>
+                        <br>
+                        <br>
+                        <p class="details">Mwahamagara: <b>{{delivery.owner.phone}} <br></p>
+                        <br>
+                        <br>
+                        {% if delivery.status == 'W' %}
+                            {% if is_on_the_list %}
+                                <p>Tegereza uri kuri list</p>
+                            {% else %}
+                            <form action="{% url 'ask_to_deliver' delivery_id=delivery.id %}" method="POST">
+                                {% csrf_token %}
+                                <div class="action_buttons">
+                                    <!-- <a class="auth_button_vaigation" id="customer_login_button" >Injira muri konti</a> -->
+                                    <button type="submit" class="auth_button" id="customer_register_button_two">SABA IKIRAKA</button>
+                                </div>
+                            </form>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+{% endblock %}

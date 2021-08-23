@@ -28,7 +28,7 @@ class Delivery(models.Model):
     owner = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
     driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True)
     number = models.CharField(max_length=100, unique=True)
-    status = models.CharField(choices=DELIVERY_STATUS, max_length=11)
+    status = models.CharField(choices=DELIVERY_STATUS, default="W",  max_length=11)
     date = models.DateTimeField(auto_now_add=True)
     departure_date_time = models.DateTimeField()
     arrival_date_time = models.DateTimeField()
@@ -37,11 +37,25 @@ class Delivery(models.Model):
     origin = models.CharField(max_length=100, null=False)
     price = models.IntegerField(default=500)
 
+    def show_kilograms(self):
+        if self.kilograms > 500:
+            return f"{self.kilograms/1000} Ton"
+        else:
+            return f"{self.kilograms} Kg"
+
     def save(self, *args, **kwargs):
-        self.status = "W"
-        pk = Delivery.objects.all().count()
-        self.number = f"{get_random_string(8).upper()}-{pk}"
+
+        if len(self.number) > 0:
+            pass
+        else:
+            pk = Delivery.objects.all().count()
+            self.number = f"{get_random_string(8).upper()}-{pk}"
         super(Delivery, self).save(*args, **kwargs)
+
+
+class DriverWaitingList(models.Model):
+    delivery = models.ForeignKey(Delivery, on_delete=models.SET_NULL, null=True)
+    driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True)
 
 
 class Product(models.Model):

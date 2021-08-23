@@ -1,6 +1,7 @@
 {% extends 'home_page.html' %}
 {% block css_block %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
 {% endblock %}
 {% block doc_title %}
 <title>Track Transport System (Admin dashboard)</title>
@@ -8,64 +9,65 @@
 
 {% block styles %}
 <style>
-.footer{
+  .footer {
     margin-top: 10vh;
     height: 15vh;
     background-color: #000;
     display: flex;
     align-items: center;
     justify-content: center;
-}
+  }
 </style>
 {% endblock %}
 {% block main_block %}
 
 <div style="background-color: black;" class="nav">
-    <h3 id="logo"><span style="color: #fff;">Truck Transport</span> System</h3>
-    <a  onclick="document.getElementById('id02').style.display='block'" >{{user.first_name}}</a>
+  <h3 id="logo"><span style="color: #fff;">Truck Transport</span> System</h3>
+  <a style="color: #fff;" onclick="document.getElementById('id02').style.display='block'">{{user.first_name}}</a>
 </div>
 
 <div class="body_dashboard">
   {% block side_bar %}
-    <div class="side_bar">
-        <ul>
-            <li class="side_bar_active">Imizigo</li>
-            <li> <a href="{% url 'record_new_carriage' %}">Andika umuzigo</a> </li>
-        </ul>
-    </div>
+  <div class="side_bar">
+    <ul>
+      <li class="side_bar_active">Imizigo</li>
+      <li> <a href="{% url 'record_new_carriage' %}">Andika umuzigo</a> </li>
+    </ul>
+  </div>
+  {% endblock %}
+  <div class="dashboard">
+    {% block customer_dashboard_block %}
+    <table class="table">
+      <!-- <caption class="center">IMIZIGO</caption> -->
+      <thead>
+        <tr>
+          <th scope="col">Nomero</th>
+          <th scope="col">Taliki</th>
+          <th scope="col">Kurikirana</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for delivery in deliveries %}
+        <tr>
+          <td data-label="Nomero y'umuzigo">{{delivery.number}}</td>
+          <td data-label="Igihe ugomba guhagurukira">{{delivery.date|date:'Y-m-d'}} {{delivery.date|time:'H:i'}}</td>
+          {% if delivery.status == 'W' %}
+          <td data-label="Aho umuzigo ugeze"> <a href="">Tegereza</a></td>
+          {% elif delivery.status == 'I' %}
+          <td data-label="Aho umuzigo ugeze"><a href="">Yemejwe</a></td>
+          {% elif delivery.status == 'D' %}
+          <td data-label="Aho umuzigo ugeze"><a href="">Yarangiye</a></td>
+          {% endif %}
+          <td data-label="Details"> <a href="{% url 'delivery_edit' pk=delivery.pk %}"> <i class="fas fa-eye"></i></a>
+          </td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
     {% endblock %}
-    <div class="dashboard">
-        {% block  customer_dashboard_block %}
-<table class="table">
-  <!-- <caption class="center">IMIZIGO</caption> -->
-  <thead>
-    <tr>
-      <th scope="col">Nomero</th>
-      <th scope="col">Taliki</th>
-      <th scope="col">Kurikirana</th>
-      <!-- <th scope="col">Period</th> -->
-    </tr>
-  </thead>
-  <tbody>
-    {% for delivery in deliveries %}
-    <tr>
-      <td data-label="Nomero y'umuzigo">{{delivery.number}}</td>
-      <td data-label="Igihe ugomba guhagurukira">{{delivery.date}}</td>
-      {% if delivery.status == 'W' %}
-      <td data-label="Aho umuzigo ugeze"> <a href="">Tegereza</a></td>
-      {% elif delivery.status == 'I' %}
-      <td data-label="Aho umuzigo ugeze"><a href="">Yemejwe</a></td>
-      {% elif delivery.status == 'D' %}
-      <td data-label="Aho umuzigo ugeze"><a href="">Yarangiye</a></td>
-      {% endif %}
-      <!-- <td data-label="Period">03/01/2016 - 03/31/2016</td> -->
-    </tr>
-    {% endfor %}
-   
-  </tbody>
-</table>
-{% endblock %}
-    </div>
+  </div>
 
 </div>
 

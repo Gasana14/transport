@@ -1,6 +1,6 @@
 # Truck Transport System
 ## Guid to setup the project
-1. Clone the project: **git clone https://github.com/iradupat/justin.git ** in your terminal (working drirectory)
+1. Clone the project: **git clone https://github.com/iradupat/justin.git** in your terminal (working drirectory)
 2. Create an environment : **python -m venv env**
 3. Activate the environment: **env\Script\activate**
 4. Install dependencies : **pip install -r requirements.txt**

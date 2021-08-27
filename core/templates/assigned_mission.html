@@ -1,4 +1,4 @@
-{% extends 'driver_dashboard.html' %}
+{% extends 'driver_missions.html' %}
 
 {% block driver_dashboard_block %}
 <br>
@@ -17,7 +17,7 @@
                         
                     </div>
                     <div class="col">
-                        <p class="details">Nifuza ko muntwarira umuzigo taliki <b>{{delivery.departure_date_time|date:"Y/m/d"}}</b> Isaha: <b>{{delivery.departure_date_time|time:"H:i"}}</b>.
+                        <p class="details">Twemeje ubusabe bwanyu. Uzapakirwa taliki <b>{{delivery.departure_date_time|date:"Y/m/d"}}</b> Isaha: <b>{{delivery.departure_date_time|time:"H:i"}}</b>.
                             <br>
                             Umuzigo uzaba uturutse <b>{{delivery.origin}}</b>, ujya <b>{{delivery.destination}}</b>.
                         </p>
@@ -27,18 +27,14 @@
                         <br>
                         <br>
                         
-                        {% if delivery.status == 'W' %}
-                            {% if is_on_the_list %}
-                                <p>Tegereza uri kuri list</p>
-                            {% else %}
-                            <form action="{% url 'ask_to_deliver' delivery_id=delivery.id %}" method="POST">
+                        {% if delivery.status == 'I' %}
+                            <form action="{% url 'print_bill' delivery_id=delivery.id %}" method="POST">
                                 {% csrf_token %}
                                 <div class="action_buttons">
                                     <!-- <a class="auth_button_vaigation" id="customer_login_button" >Injira muri konti</a> -->
-                                    <button type="submit" class="auth_button" id="customer_register_button_two">SABA IKIRAKA</button>
+                                    <button type="submit" class="auth_button" id="customer_register_button_two">PRINT</button>
                                 </div>
                             </form>
-                            {% endif %}
                         {% endif %}
                     </div>
                 </div>

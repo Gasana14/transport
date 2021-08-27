@@ -1,16 +1,70 @@
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.utils import timezone
+import random
 from .forms import RegistrationForm, VehicleForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Customer, Vehicle, Driver, Delivery, DriverWaitingList
 from django.utils.crypto import get_random_string
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from .utils import link_callback
+from django.conf import settings
+from django.utils.crypto import get_random_string
 # Create your views here.
 
 
+def alert_users(deliveries,  request):
+    for delivery in deliveries:
+        remaining_time = ((delivery.departure_date_time - timezone.now()).total_seconds() / (60 * 60 * 24))
+        print(remaining_time)
+        if remaining_time <= 1:
+            messages.warning(request, f'Umuzigo N0: {delivery.number} wenda kurnza cg warengeje italiki!!')
+
+
+def profile_page(request):
+    user = request.user
+    drivers = Driver.objects.filter(account=user)
+    customers = Customer.objects.filter(account=user)
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        phone = request.POST.get('phone')
+        profile = request.FILES.get('profile')
+
+        user.first_name = first_name if first_name is not None else user.first_name
+        user.last_name = last_name if last_name is not None else user.last_name
+        user.save()
+        if customers.exists():
+            customer = customers.first()
+            customer.phone = phone if phone is not None else customer.phone
+            customer.profile_picture = profile if profile is not None else customer.profile_picture
+            customer.save()
+        elif drivers.exists():
+            driver = drivers.first()
+            driver.phone = phone if phone is not None else driver.phone
+            driver.has_profile = True if profile is not None else False
+            driver.profile_picture = profile if profile is not None else driver.profile_picture
+            driver.save()
+        messages.success(request, 'Profile edited')
+        return redirect('profile_page')
+
+    else:
+        if customers.exists():
+            return render(request, 'profile.html', {"customer": customers.first()})
+        elif drivers.exists():
+            driver = drivers.first()
+            vehicles = Vehicle.objects.filter(driver=driver)
+            return render(request, 'profile.html', {"driver": driver, "vehicles": vehicles})
+
+
 def home_page(request):
-    return render(request, 'home_page.html')
+    drivers = [element for element in Driver.objects.all()]
+    random_drivers = random.sample(drivers, min(len(drivers), 3))
+    return render(request, 'home_page.html', {"drivers": random_drivers})
 
 
 def login_page(request):
@@ -29,16 +83,56 @@ def admin_dashboard(request):
 @login_required
 def customer_dashboard(request):
     user = request.user
+    clients = Customer.objects.filter(account=user)
+    print(clients.exists())
+    if clients.exists() is False:
+
+        messages.error(request, 'Not a client account')
+        return redirect('home')
+    else:
+        client = clients.first()
+        deliveries = Delivery.objects.filter(owner=client).order_by('-departure_date_time')
+        print(deliveries)
+        return render(request, 'customer_dashboard.html', {"deliveries": deliveries})
+
+
+@login_required()
+def accept_request(request, delivery_id, driver_id):
+    user = request.user
     client = Customer.objects.get(account=user)
     if client is None:
         messages.error(request, 'Not a client account')
         return redirect('home')
     else:
-        deliveries = Delivery.objects.filter(owner=client).order_by('-departure_date_time')
-        print(deliveries)
-    return render(request, 'customer_dashboard.html', {"deliveries": deliveries})
+        delivery = Delivery.objects.get(id=delivery_id)
+        driver = Driver.objects.get(id=driver_id)
+        DriverWaitingList.objects.filter(delivery=delivery).delete()
+        delivery.driver = driver
+        delivery.status = 'I'
+        delivery.save()
+        return redirect('delivery_edit', pk=delivery_id)
 
 
+@login_required()
+def driver_profile(request, reason, driver_id, delivery_id):
+    user = request.user
+    driver = Driver.objects.get(pk=driver_id)
+    if Customer.objects.filter(account=user).exists():
+        delivery = Delivery.objects.get(pk=delivery_id)
+        if reason == 'ASSIGN':
+            alert_users([delivery], request)
+            messages.warning(request, "Waba koko wifuza gutanga ikiraka? Ohereza iyi form. Niba utabyifuza subira inyuma.")
+            return render(request, 'driver_profile.html', {"reason": "ASSIGN", "driver": driver, "delivery": delivery})
+        else:
+            return render(request, 'driver_profile.html', {"reason": "VIEW", "driver": driver})
+    elif Driver.objects.filter(account=user).exists():
+        if reason == 'Edit':
+            return render(request, 'driver_profile.html', {"reason": "EDIT", "driver": driver})
+        else:
+            return render(request, 'driver_profile.html', {"reason": "VIEW", "driver": driver})
+
+
+@login_required()
 def delivery_edit(request, pk):
     user = request.user
     client = Customer.objects.get(account=user)
@@ -50,7 +144,6 @@ def delivery_edit(request, pk):
             delivery = Delivery.objects.get(pk=pk)
             driver_list = DriverWaitingList.objects.filter(delivery=delivery)
             list_of_drivers = [list_row.driver for list_row in driver_list]
-            print(list_of_drivers)
             return render(request, 'delivery_edit.html', {"delivery": delivery, "list_of_drivers": list_of_drivers})
         else:
             delivery = Delivery.objects.get(pk=pk)
@@ -130,9 +223,48 @@ def driver_dashboard(request):
         return redirect('home')
     else:
 
-        deliveries = Delivery.objects.filter(status='W').order_by('departure_date_time')
+        deliveries = Delivery.objects.filter(status='W').order_by('-departure_date_time')
+        # alert_users(deliveries, request)
+        return render(request, 'driver_dashboard.html', {"deliveries": deliveries})
 
-    return render(request, 'driver_dashboard.html', {"deliveries": deliveries})
+
+@login_required
+def print_bill(request, delivery_id):
+    user = request.user
+    driver = Driver.objects.get(account=user)
+    if driver is None:
+        messages.error(request, 'Not a driver account')
+        return redirect('home')
+    else:
+        delivery = Delivery.objects.get(pk=delivery_id)
+        template_path = settings.BASE_DIR/'core/templates/bill.html'
+        context = {'delivery': delivery, 'test': 'Test here!'}
+        # Create a Django response object, and specify content_type a6s pdf
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="bill.pdf"'
+        # find the template and render it.
+        template = get_template(template_path)
+        html = template.render(context)
+
+        # create a pdf
+        pisa_status = pisa.CreatePDF(
+            html, dest=response, link_callback=link_callback)
+        # if error then show some funy view
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+
+
+@login_required
+def mission_details(request, delivery_id):
+    user = request.user
+    driver = Driver.objects.get(account=user)
+    if driver is None:
+        messages.error(request, 'Not a driver account')
+        return redirect('home')
+    else:
+        delivery = Delivery.objects.get(id=delivery_id)
+        return render(request, 'assigned_mission.html', {"delivery": delivery})
 
 
 @login_required
@@ -145,9 +277,10 @@ def driver_missions(request):
         messages.error(request, 'Not a driver account')
         return redirect('home')
     else:
-        deliveries = Delivery.objects.filter(driver=driver)
-
-    return render(request, 'driver_missions.html', {"deliveries": deliveries})
+        # deliveries = Delivery.objects.filter(driver=driver)
+        deliveries = driver.get_assigned_deliveries()
+        alert_users(deliveries, request)
+        return render(request, 'driver_missions.html', {"deliveries": deliveries})
 
 
 def delivery_details(request, pk):
@@ -161,11 +294,11 @@ def delivery_details(request, pk):
         is_on_the_list = DriverWaitingList.objects.filter(driver=driver, delivery=delivery).exists()
         return render(request, 'delivery_details.html', {"delivery": delivery, "is_on_the_list": is_on_the_list})
 
+
 def register_account(request):
 
     if request.method == 'POST':
         reg_form = RegistrationForm(request.POST)
-        vehicle_form = VehicleForm(request.POST)
 
         if reg_form.is_valid():
             email = reg_form.cleaned_data.get('email')
@@ -228,12 +361,13 @@ def login_client(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            customer = Customer.objects.get(account=user)
-            if customer is None:
+            customers = Customer.objects.filter(account=user)
+            if customers.exists() is False:
                 messages.error(request, 'Not a client account.')
                 return redirect('login_page')
             else:
                 login(request, user)
+                request.session["is_who"] = "CUSTOMER"
                 messages.success(request, f' Welcome {user.first_name}.')
                 return redirect('customer_dashboard')
         else:
@@ -250,19 +384,47 @@ def login_driver(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            driver = Driver.objects.get(account=user)
-            if driver is None:
+            drivers = Driver.objects.filter(account=user)
+            if drivers.exists() is False:
                 messages.error(request, 'Not a driver account.')
-                return redirect('home')
+                return redirect('login_page')
             else:
                 login(request, user)
+                request.session["is_who"] = "DRIVER"
                 messages.success(request, f' Welcome {user.first_name}.')
                 return redirect('driver_dashboard')
         else:
             messages.error(request, 'Credentials provided are not correct.')
-            return redirect('home')
+            return redirect('login_page')
 
     else:
         return redirect('home')
+
+
+@login_required()
+def add_vehicle_or_delete(request):
+    user = request.user
+    driver = Driver.objects.filter(account=user).first()
+    if driver is None:
+        messages.error(request, 'Not a driver account')
+        return redirect('home')
+    else:
+
+        if request.method == 'POST':
+            plate = request.POST.get('plate')
+            capacity = request.POST.get('capacity')
+            model = request.POST.get('model')
+            Vehicle.objects.create(driver=driver, plate=plate, capacity=capacity, model=model)
+            messages.success(request, 'Ikinyabiziga cyandukuwe.')
+            return redirect('profile_page')
+        else:
+            plate = request.GET.get('plate_delete')
+            capacity = request.GET.get('capacity_delete')
+            model = request.GET.get('model_delete')
+            vehicles = Vehicle.objects.filter(driver=driver, plate=plate, model=model, capacity=capacity)
+            print(plate, capacity, model)
+            vehicles.delete()
+            messages.success(request, 'Ikinyabiziga cya sibwe kurubuga.')
+            return redirect('profile_page')
 
 

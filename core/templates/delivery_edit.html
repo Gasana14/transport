@@ -7,9 +7,7 @@
 
     </div>
     <div class="col-md-6">
-        <br>
-            <br>
-               
+            <br>   
             <br>
             <br>
             <form method="POST" action="{% url 'delivery_edit' pk=delivery.pk %}">
@@ -62,9 +60,9 @@
                 <ul>
                     {% for driver in list_of_drivers %}
                      {% if forloop.counter < 3 %}
-                     <li> <a href=""> {{driver.account.first_name}} : {{driver.phone}}</a> </li>
+                     <li> <a href="{% url 'driver_profile' reason='ASSIGN' driver_id=driver.pk  delivery_id=delivery.pk %}"> {{driver.account.first_name}} : {{driver.phone}}</a> </li>
                     {% elif forloop.counter == 3 %}
-                    <li><a style="text-decoration: none;" href="">Abandi ...</a></li>
+                    <li><a style="text-decoration: none;" href="{% url 'driver_profile' ASSIGN %}">Abandi ...</a></li>
                     {% endif %}
                   
                     {% endfor %}
@@ -74,9 +72,11 @@
             </form>
     </div>
     <div class="col-md-3">
-
+       
     </div>
+
 </div>
+  
 
 
 <script>

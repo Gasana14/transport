@@ -27,8 +27,14 @@
 {% block main_block %}
 
 <div style="background-color: black;" class="nav">
+  {% if request.session.is_who == 'DRIVER' %}
+  <a href="{% url 'driver_dashboard' %}"> <h3  id="logo"><span style="color: #fff;">Truck Transport</span> System</h3></a>
+  {% elif request.session.is_who == 'CUSTOMER' %}
+  <a href="{% url 'customer_dashboard' %}"> <h3  id="logo"><span style="color: #fff;">Truck Transport</span> System</h3></a>
+  {% else %}
   <h3 id="logo"><span style="color: #fff;">Truck Transport</span> System</h3>
-  <a onclick="document.getElementById('id02').style.display='block'">{{user.first_name}}</a>
+  {% endif %}
+  <a style="color: #fff;" onclick="document.getElementById('id02').style.display='block'">{{user.first_name}}</a>
 </div>
 
 <div class="body_dashboard">

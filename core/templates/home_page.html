@@ -52,7 +52,7 @@
 
                     <div class="tool_nav">
                         <ul id="profile_nav">
-                            <li class="auth_nav_list_active" id="profile_button_nav">Umwirondoro</li>
+                            <li class="auth_nav_list_active" id="profile_button_nav">Hindura umwirondoro</li>
                             <li id="logout_button_nav">Sohoka</li>
                             <!-- <li id="driverTabButton">Driver</li> -->
                         </ul>
@@ -63,14 +63,12 @@
 
                         <div class="tab" id="change_profile">
 
-                            <form action="">
-
-                                <input type="email" placeholder="Imeri">
-
-                                <input type="password" placeholder="Ijambo banga">
+                            <form method="GET" action="{% url 'profile_page' %}">
+                                {% csrf_token %}
                                 <div class="action_buttons">
                                     <!-- <a id="customer_register_button" class="auth_button_vaigation" >Register</a> -->
-                                    <button type="button" class="auth_button">OHEREZA</button>
+                                    <a href="{% url 'profile_page' %}"><button type="button" class="auth_button"
+                                        id="admin_login_button_one">HINDURA</button></a>
                                 </div>
                             </form>
 
@@ -207,8 +205,14 @@
     <section class="banner">
 
         <div class="nav">
-            <h3 id="logo"><span>Truck Transport</span> System</h3>
-            {% if user.is_authenticated %}
+            {% if request.session.is_who == 'DRIVER' %}
+           <a href="{% url 'driver_dashboard' %}"> <h3 id="logo"><span>Truck Transport</span> System</h3></a>
+           {% elif request.session.is_who == 'CUSTOMER' %}
+           <a href="{% url 'customer_dashboard' %}"> <h3 id="logo"><span>Truck Transport</span> System</h3></a>
+           {% else %}
+           <h3 id="logo"><span>Truck Transport</span> System</h3>
+           {% endif %}
+           {% if user.is_authenticated %}
                 <a style="color: #fff;" onclick="document.getElementById('id02').style.display='block'">{{user.first_name}}</a>
 
             {% else %}
@@ -224,22 +228,28 @@
     <section class="body">
         <h4>Abikorezi dukorana nabo</h4>
         <div class="profiles">
+            {% for driver in drivers %}
             <div class="card">
                 <div class="crad_img">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrjzfCh8IdcSA-LnFQ7NRXuDrdhHF6jCpEAQ&usqp=CAU"
-                        alt="">
+
+                    {% if driver.has_profile  %}
+                    <img   id="banner" style="object-fit: cover;" src="{{driver.profile_picture.url}}" alt="">
+                    {% else %}
+                    <img   id="banner" style="object-fit: cover;" src="https://www.startupindia.gov.in/content/dam/invest-india/ams/Default-banner.png" alt="">
+                    {% endif %}
                 </div>
                 <div class="crad_details">
-                    <p>Kamali Pierre 12/01/2021</p>
-                    <p>Ikinyabiziga: Toyota E</p>
+                    <p style="text-transform: capitalize;" >{{driver.account.first_name}} {{driver.account.last_name}} </p>
+                    <p>Natangiye: {{driver.account.date_joined|date:"d/m/Y"}}</p>
                     <p>Umubare : 2</p>
                 </div>
                 <div class="crad_description">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, perferendis.
-                    Lorem ipsum dolor, sit amet consectetur adipisicing.
+                    Dushobora gutwara ibicuruzwa bipima {{driver.calculate_capacity}}, mubinyabiziga byacu {{driver.how_many_cars}}.
+                    <span style="text-transform: capitalize;">{{driver.description}}</span>
                 </div>
             </div>
-            <div class="card">
+            {% endfor %}
+            <!-- <div class="card">
                 <div class="crad_img">
                     <img src="https://images.unsplash.com/photo-1534011056808-50c1c6082fe7?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bWluaSUyMGJ1c3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"
                         alt="">
@@ -253,8 +263,8 @@
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, perferendis.
                     Lorem ipsum dolor, sit amet consectetur adipisicing.
                 </div>
-            </div>
-            <div class="card">
+            </div> -->
+            <!-- <div class="card">
                 <div class="crad_img">
                     <img src="https://3.imimg.com/data3/OV/VI/MY-9370836/motor-cycle-delivery-box-500x500.jpeg" alt="">
                 </div>
@@ -267,7 +277,7 @@
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, perferendis.
                     Lorem ipsum dolor, sit amet consectetur adipisicing.
                 </div>
-            </div>
+            </div> -->
         </div>
     </section>
     {% endblock %}
@@ -276,8 +286,10 @@
         <i class="fab fa-twitter"></i>
         <i class="fas fa-envelope"></i>
     </footer>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script> -->
 
     </div>
+    
     {% block javascript %}
     <script src="{% static 'js/main.js' %}"></script>
     {% endblock %}

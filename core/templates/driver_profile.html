@@ -1,0 +1,70 @@
+{% extends 'home_page.html' %}
+
+{% block css_block %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+{% endblock %}
+
+{% block main_block %}
+<div style="background-color: black;" class="nav">
+  {% if request.session.is_who == 'DRIVER' %}
+           <a href="{% url 'driver_dashboard' %}"> <h3  id="logo"><span style="color: #fff;">Truck Transport</span> System</h3></a>
+           {% elif request.session.is_who == 'CUSTOMER' %}
+           <a href="{% url 'customer_dashboard' %}"> <h3  id="logo"><span style="color: #fff;">Truck Transport</span> System</h3></a>
+           {% else %}
+           <h3 id="logo"><span style="color: #fff;">Truck Transport</span> System</h3>
+           {% endif %}
+    <a onclick="document.getElementById('id02').style.display='block'">{{user.first_name}}</a>
+  </div>
+
+  <div class="row">
+     
+          <div class="col-md-3"></div>
+          <div class="col-md-6">
+              <br>
+              <br>
+              <h3 style="text-align: center; text-transform: uppercase;">{{driver.account.first_name}}</h3>
+              <br>
+            <table style="width:100%; border: 2px solid rgb(100, 99, 99);" cellpadding="20">
+                <tr style="height: 50px;">
+                  <td>Amazina</th>
+                  <td>{{driver.account.first_name}}</th>
+         
+                </tr>
+          
+                <tr style="height: 50px; ">
+                  <td>Ibinyabiziga </td>
+                  <td>{{driver.how_many_cars}}</td>
+          
+                </tr>
+                <tr style="height: 50px;">
+                    <td>Ubushobozi bwo kwikorera </td>
+                    <td>{{driver.calculate_capacity}}</td>
+            
+                  </tr>
+            
+                <tr style="height: 50px;">
+                  <td>Telephone</td>
+                  <td>{{driver.phone}} </td>
+      
+                </tr>
+                <tr style="height: 50px;">
+                 
+                    <td>
+                    <form method="POST" action="{% url 'accept_request' driver_id=driver.pk delivery_id=delivery.pk %}">
+                       {% csrf_token %}
+                        <div class="action_buttons">
+                            <!-- <a class="auth_button_vaigation" id="customer_login_button" >Injira muri konti</a> -->
+                            <button type="submit" class="auth_button" id="customer_register_button_two">EMEZA UBUSABE</button>
+                        </div>
+                    </form>
+                    </td>
+                    <td></td>
+                  </tr>
+              </table>
+          </div>
+          <div class="col-md-2"></div>
+     
+  </div>
+
+{% endblock %}

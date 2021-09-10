@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Umuguzi | Ibikorwa</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+    <!-- https://fonts.google.com/specimen/Roboto -->
+
+
+    <link rel="stylesheet" href="{% static 'customer-dashboard/css/fontawesome.min.css' %}">
+    <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="{% static 'customer-dashboard/css/bootstrap.min.css' %}">
+    <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="{% static 'customer-dashboard/css/templatemo-style.css' %}">
+    <!--
+	Product Admin CSS Template
+	https://templatemo.com/tm-524-product-admin
+	-->
+</head>
+
+<body id="reportsPage">
+    <div class="" id="home">
+        <nav class="navbar navbar-expand-xl">
+            <div class="container h-100">
+                <a class="navbar-brand" href="{% url 'driver_dashboard' %}">
+                    <h1 class="tm-site-title mb-0">MURAKAZA</h1>
+                </a>
+                <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars tm-nav-icon"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-auto h-100">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'driver_dashboard' %}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Ibikorwa
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'driver_missions' %}">
+                                <i class="fas fa-shopping-cart"></i>
+                                Imigizo
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'profile_page' %}">
+                                <i class="far fa-user"></i>
+                                Konti
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <i class="far fa-file-alt"></i>
+                                <span>
+                                    Incamacye <i class="fas fa-angle-down"></i>
+                                </span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Daily Report</a>
+                                <a class="dropdown-item" href="#">Weekly Report</a>
+                                <a class="dropdown-item" href="#">Yearly Report</a>
+                            </div>
+                        </li>
+
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link d-block" href="{% url 'login_page' %}">
+                                {{user.first_name}}, <b>Logout</b>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p class="text-white mt-5 mb-5">Ibikorwa byanyu, <b>{{user.first_name}}</b></p>
+                </div>
+            </div>
+            <!-- row -->
+            <div class="row tm-content-row">
+
+<!--                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col hidden">-->
+<!--                    <div class="tm-bg-primary-dark tm-block">-->
+<!--                        <h2 class="tm-block-title">Performance</h2>-->
+<!--                        <canvas id="barChart"></canvas>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">-->
+<!--                    <div class="tm-bg-primary-dark tm-block tm-block-taller">-->
+<!--                        <h2 class="tm-block-title">Storage Information</h2>-->
+<!--                        <div id="pieChartContainer">-->
+<!--                            <canvas id="pieChart" class="chartjs-render-monitor" width="200" height="200"></canvas>-->
+<!--                        </div>                        -->
+<!--                    </div>-->
+<!--                </div>-->
+
+                <div class="col-12 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
+                      <div style="weight:100%;height:50px;">
+                        <h2 class="tm-block-title" style="float:left;font-family:Cambria Math; font-weight:bolder;font-size:20px;color:white;">Amakuru Ku muzigo</h2>
+                        <h2 style="float:right;">
+                             {% if delivery.status == 'W' %}
+                            {% if is_on_the_list %}
+                                <h3 style="font-family:Cambria Math; font-weight:bolder;font-size:20px;color:white;float:right;margin-top:0.5%;margin-right:2%;">Tegereza uri kuri list</h3>
+                            {% else %}
+                            <form action="{% url 'ask_to_deliver' delivery_id=delivery.id %}" method="POST">
+                                {% csrf_token %}
+                                <div class="action_buttons" style="height:40px; weight:40%;" >
+                                    <!-- <a class="auth_button_vaigation" id="customer_login_button" >Injira muri konti</a> -->
+                                    <button type="submit" class="btn-primary" id="customer_register_button_two" style="font-family:Cambria Math;font-size:20px;">SABA IKIRAKA</button>
+                                </div>
+                            </form>
+                            {% endif %}
+                        {% endif %}
+                        </h2>
+                      </div>
+                        <div style="width:100%; height:250px; background-color:#f0f0f0;text-align:center;">
+                        <div style="height:50px; width:100%;background-color:gray;">
+                         <h3 style="padding-top:1.2%;margin-left:1%; font-family:Cambria;font-weight:bolder;font-size:20px; color:#3d3d3d;">NUMERO Y' UMUZIGO : {{delivery.number}}</h3>
+                        </div>
+                         <div style="width:100%; height:220px;display:flex;">
+                            <div style="width: 50%;	height: 220px;	background-color: #FFFFFF;border:1px solid gray;	position: relative;">
+                            <div style="width:100%; height:54px; border: 1px solid gray;">
+                                <div style="display:flex">
+                                    <div style="width:50%;height:54px;">
+                                       <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-left:20%;margin-top:7%;">NYIRI UMUZIGO</h3>
+                                    </div>
+                                    <div style="width:50%;height:54px;">
+                                        <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-top:7%;float:left;">: {{delivery.owner.account.first_name}} {{delivery.owner.account.last_name}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width:100%; height:54px;border-right: 1px solid gray; border-left: 1px solid gray;">
+                                <div style="display:flex">
+                                    <div style="width:50%;height:54px;">
+                                       <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-left:20%;margin-top:7%;">ITALIKI BYATANGIWE</h3>
+                                    </div>
+                                    <div style="width:50%;height:54px;">
+                                        <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-top:7%;float:left;">: {{delivery.date|date:"Y/m/d"}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width:100%; height:54px; border: 1px solid gray;">
+                                <div style="display:flex">
+                                    <div style="width:50%;height:54px;">
+                                       <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-left:20%;margin-top:7%;">IGICIRO</h3>
+                                    </div>
+                                    <div style="width:50%;height:54px;">
+                                        <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-top:7%;float:left;">: {{delivery.price}} Frw</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width:100%; height:54px;border-right: 1px solid gray;border-bottom: 1px solid gray; border-left: 1px solid gray;">
+                                <div style="display:flex">
+                                    <div style="width:50%;height:54px;">
+                                       <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-left:20%;margin-top:7%;">IBIRO BY' UMUZIGO</h3>
+                                    </div>
+                                    <div style="width:50%;height:54px;">
+                                        <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-top:7%;float:left;">: {{delivery.show_kilograms}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                             <div style="width: 50%;	height: 220px;	background-color: #FFFFFF;border:1px solid gray;	position: relative;">
+                              <div style="width:100%; height:54px; border: 1px solid gray;">
+                                <div style="display:flex">
+                                    <div style="width:50%;height:54px;">
+                                       <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-left:1%;margin-top:7%;">GUTWARA UMUZIGO</h3>
+                                    </div>
+                                    <div style="width:50%;height:54px;">
+                                        <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-top:7%;float:left;">: {{delivery.departure_date_time|date:"Y/m/d"}} ISAHA : {{delivery.departure_date_time|time:"H:i"}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width:100%; height:54px;border-right: 1px solid gray; border-left: 1px solid gray;">
+                                <div style="display:flex">
+                                    <div style="width:50%;height:54px;">
+                                       <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-left:1%;margin-top:7%;">UMUZIGO UVUYE</h3>
+                                    </div>
+                                    <div style="width:50%;height:54px;">
+                                        <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-top:7%;float:left;">: {{delivery.origin}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width:100%; height:54px; border: 1px solid gray;">
+                                <div style="display:flex">
+                                    <div style="width:50%;height:54px;">
+                                       <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-left:1%;margin-top:7%;">UMUZIGO UJYIYE</h3>
+                                    </div>
+                                    <div style="width:50%;height:54px;">
+                                        <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-top:7%;float:left;">: {{delivery.destination}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width:100%; height:54px;border-right: 1px solid gray;border-bottom: 1px solid gray; border-left: 1px solid gray;">
+                                <div style="display:flex">
+                                    <div style="width:50%;height:54px;">
+                                       <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-left:1%;margin-top:7%;">TELEPHONE</h3>
+                                    </div>
+                                    <div style="width:50%;height:54px;">
+                                        <h3 style="font-family:Cambria Math; text-transform:uppercase;font-size:17px; font-weight:bolder;margin-top:7%;float:left;">: {{delivery.owner.phone}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+
+                         </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="tm-footer row tm-mt-small">
+            <div class="col-12 font-weight-light">
+                <p class="text-center text-white mb-0 px-4 small">
+                    Copyright &copy; <b>2021</b> All rights reserved.
+                    
+                    Design: <a rel="nofollow noopener" href="https://templatemo.com" class="tm-footer-link">Template Mo</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+
+    <script src="{% static 'customer-dashboard/js/jquery-3.3.1.min.js' %}"></script>
+    <!-- https://jquery.com/download/ -->
+    <script src="{% static 'customer-dashboard/js/moment.min.js' %}"></script>
+    <!-- https://momentjs.com/ -->
+    <script src="{% static 'customer-dashboard/js/Chart.min.js' %}"></script>
+    <!-- http://www.chartjs.org/docs/latest/ -->
+    <script src="{% static 'customer-dashboard/js/bootstrap.min.js' %}"></script>
+    <!-- https://getbootstrap.com/ -->
+    <script src="{% static 'customer-dashboard/js/tooplate-scripts.js' %}"></script>
+    <script>
+        Chart.defaults.global.defaultFontColor = 'white';
+        let ctxLine,
+            ctxBar,
+            ctxPie,
+            optionsLine,
+            optionsBar,
+            optionsPie,
+            configLine,
+            configBar,
+            configPie,
+            lineChart;
+        barChart, pieChart;
+        // DOM is ready
+        $(function () {
+            drawLineChart(); // Line Chart
+            drawBarChart(); // Bar Chart
+            drawPieChart(); // Pie Chart
+
+            $(window).resize(function () {
+                updateLineChart();
+                updateBarChart();                
+            });
+        })
+    </script>
+</body>
+
+</html>

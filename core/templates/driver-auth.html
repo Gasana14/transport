@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<title>Auth</title>
+
+	<link rel="stylesheet" type="text/css" href="{% static 'users-auth/style.css'%}">
+	
+
+</head>
+<body>
+
+<br>
+<br>
+    <div class="cont">
+        <div class="form sign-in">
+            <form id="driver_login_form" action="{% url 'login_driver' %}" method="POST">
+            {% csrf_token %}
+                <h2>Murakaza</h2>
+            <label>
+                <span>Imeri</span>
+                <input name="email" type="email" placeholder="..." />
+            </label>
+            <label>
+                <span>Ijambo Banga</span>
+                <input name="password" type="password" placeholder="..." />
+            </label>
+            <p class="forgot-pass">Wibagiwe Ijambo Banga?</p>
+            <button type="submit" id="driver_login_button_two" class="submit">Komeza</button>
+            </form>
+        </div>
+        <div class="sub-cont">
+            <div class="img" style="background-color:#f7665c;">
+                <div class="img__text m--up" >
+                 
+                    <h3>Nta Konti mugira? Muyifungure Hano!<h3>
+                </div>
+                <div class="img__text m--in">
+                
+                    <h3>Niba mwamaze kugira Konti, Mwinjirire Hano.<h3>
+                </div>
+                <div class="img__btn">
+                    <span class="m--up">Konti</span>
+                    <span class="m--in">Injira</span>
+                </div>
+            </div>
+            <div class="form sign-up">
+                <h2>Fungura Konti Yawe</h2>
+                <form id="customer_register_form" method="post" action="{% url 'register' %}">
+                    {% csrf_token %}
+                    <label>
+                    <span>Imeri</span>
+                    <input name="email" type="email" placeholder="..." />
+                </label>
+                <label>
+                    <span>Telefone</span>
+                    <input name="phone" type="text" placeholder="...." />
+                </label>
+                  <label>
+                    <span>Ibinyabiziga</span>
+                    <input required type="text" name="vehicles" value="1" type="number" placeholder="...." />
+                </label>
+                    <label hidden>
+                    <span hidden>Urwego</span>
+                    <input name="is_customer" type="text" value="is_driver" readonly hidden="true"/>
+                </label>
+                 <label hidden>
+                    <span hidden>Urwego</span>
+                    <input type="text" value="not_admin" name="is_admin" readonly hidden="true"/>
+                </label>
+                <label>
+                    <span>Ijambo Banga</span>
+                    <input name="password" type="password" placeholder="..." />
+                </label>
+                <button type="submit" class="submit" id="customer_register_button_two" >Fungura</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.img__btn').addEventListener('click', function() {
+            document.querySelector('.cont').classList.toggle('s--signup');
+        });
+    </script>
+</body>
+</html>

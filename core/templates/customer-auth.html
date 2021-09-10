@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<title>Auth</title>
+
+	<link rel="stylesheet" type="text/css" href="{% static 'users-auth/style.css'%}">
+	
+
+</head>
+<body>
+
+<br>
+<br>
+    <div class="cont">
+        <div class="form sign-in">
+            <form id="customer_login_form" method="POST" action="{% url 'login_client' %}">
+            {% csrf_token %}
+                <h2 style="font-family:Cambria Math; font-weight:bolder;">Murakaza</h2>
+            <label>
+                <span style="font-family:Cambria Math; font-weight:bolder;">Imeri</span>
+                <input name="email" type="email" placeholder="..." />
+            </label>
+            <label>
+                <span style="font-family:Cambria Math; font-weight:bolder;">Ijambo Banga</span>
+                <input name="password" type="password" placeholder="..." />
+            </label>
+            <p class="forgot-pass">Wibagiwe Ijambo Banga?</p>
+            <button type="submit" id="customer_login_button_one" class="submit" style="font-family:Cambria Math; font-weight:bolder;">Komeza</button>
+            </form>
+        </div>
+        <div class="sub-cont">
+            <div class="img">
+                <div class="img__text m--up">
+                 
+                    <h3 style="font-family:Cambria Math; font-weight:bolder;">Nta Konti mugira? Muyifungure Hano!<h3>
+                </div>
+                <div class="img__text m--in">
+                
+                    <h3 style="font-family:Cambria Math; font-weight:bolder;">Niba mwamaze kugira Konti, Mwinjirire Hano.<h3>
+                </div>
+                <div class="img__btn">
+                    <span class="m--up" style="font-family:Cambria Math; font-weight:bolder;">Konti</span>
+                    <span class="m--in" style="font-family:Cambria Math; font-weight:bolder;">Injira</span>
+                </div>
+            </div>
+            <div class="form sign-up">
+                <h2 style="font-family:Cambria Math; font-weight:bolder;">Fungura Konti Yawe</h2>
+                <form id="customer_register_form" method="post" action="{% url 'register' %}">
+                    {% csrf_token %}
+                    <label>
+                    <span style="font-family:Cambria Math; font-weight:bolder;">Imeri</span>
+                    <input name="email" type="email" placeholder="..." />
+                </label>
+                <label>
+                    <span style="font-family:Cambria Math; font-weight:bolder;">Telefone</span>
+                    <input name="phone" type="text" placeholder="...." />
+                </label>
+                    <label hidden>
+                    <span hidden>Urwego</span>
+                    <input name="is_customer" type="text" value="is_customer" readonly hidden="true"/>
+                </label>
+                <label>
+                    <span style="font-family:Cambria Math; font-weight:bolder;">Ijambo Banga</span>
+                    <input name="password" type="password" placeholder="..." />
+                </label>
+                <button type="submit" class="submit" id="customer_register_button_two" style="font-family:Cambria Math; font-weight:bolder;" >Fungura</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.img__btn').addEventListener('click', function() {
+            document.querySelector('.cont').classList.toggle('s--signup');
+        });
+    </script>
+</body>
+</html>

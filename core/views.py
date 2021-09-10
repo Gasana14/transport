@@ -54,21 +54,29 @@ def profile_page(request):
 
     else:
         if customers.exists():
-            return render(request, 'profile.html', {"customer": customers.first()})
+            return render(request, 'customer-profile.html', {"customer": customers.first()})
         elif drivers.exists():
             driver = drivers.first()
             vehicles = Vehicle.objects.filter(driver=driver)
-            return render(request, 'profile.html', {"driver": driver, "vehicles": vehicles})
+            return render(request, 'driver-profile.html', {"driver": driver, "vehicles": vehicles})
 
 
 def home_page(request):
     drivers = [element for element in Driver.objects.all()]
     random_drivers = random.sample(drivers, min(len(drivers), 3))
-    return render(request, 'home_page.html', {"drivers": random_drivers})
+    return render(request, 'home-page.html', {"drivers": random_drivers})
 
 
 def login_page(request):
-    return render(request, 'login_page.html')
+    return render(request, 'login-page.html')
+
+
+def customer_auth(request):
+    return render(request, 'customer-auth.html')
+
+
+def driver_auth(request):
+    return render(request, 'driver-auth.html')
 
 
 def register_page(request):
@@ -93,7 +101,7 @@ def customer_dashboard(request):
         client = clients.first()
         deliveries = Delivery.objects.filter(owner=client).order_by('-departure_date_time')
         print(deliveries)
-        return render(request, 'customer_dashboard.html', {"deliveries": deliveries})
+        return render(request, 'customer-dashboard.html', {"deliveries": deliveries})
 
 
 @login_required()
@@ -110,7 +118,7 @@ def accept_request(request, delivery_id, driver_id):
         delivery.driver = driver
         delivery.status = 'I'
         delivery.save()
-        return redirect('delivery_edit', pk=delivery_id)
+        return redirect('delivery-edit', pk=delivery_id)
 
 
 @login_required()
@@ -144,7 +152,7 @@ def delivery_edit(request, pk):
             delivery = Delivery.objects.get(pk=pk)
             driver_list = DriverWaitingList.objects.filter(delivery=delivery)
             list_of_drivers = [list_row.driver for list_row in driver_list]
-            return render(request, 'delivery_edit.html', {"delivery": delivery, "list_of_drivers": list_of_drivers})
+            return render(request, 'delivery-edit.html', {"delivery": delivery, "list_of_drivers": list_of_drivers})
         else:
             delivery = Delivery.objects.get(pk=pk)
             delivery.departure_date_time = request.POST.get('departure_date_time')
@@ -173,7 +181,7 @@ def record_new_carriage(request):
     else:
         if request.method == 'GET':
             # deliveries = Delivery.objects.filter(owner=client)
-            return render(request, 'new_carriage.html')
+            return render(request, 'new-carriage.html')
         else:
 
             departure_date_time = request.POST.get('departure_date_time')
@@ -225,7 +233,7 @@ def driver_dashboard(request):
 
         deliveries = Delivery.objects.filter(status='W').order_by('-departure_date_time')
         # alert_users(deliveries, request)
-        return render(request, 'driver_dashboard.html', {"deliveries": deliveries})
+        return render(request, 'driver-dashboard.html', {"deliveries": deliveries})
 
 
 @login_required
@@ -264,7 +272,7 @@ def mission_details(request, delivery_id):
         return redirect('home')
     else:
         delivery = Delivery.objects.get(id=delivery_id)
-        return render(request, 'assigned_mission.html', {"delivery": delivery})
+        return render(request, 'assigned-mission.html', {"delivery": delivery})
 
 
 @login_required
@@ -280,7 +288,7 @@ def driver_missions(request):
         # deliveries = Delivery.objects.filter(driver=driver)
         deliveries = driver.get_assigned_deliveries()
         alert_users(deliveries, request)
-        return render(request, 'driver_missions.html', {"deliveries": deliveries})
+        return render(request, 'driver-missions.html', {"deliveries": deliveries})
 
 
 def delivery_details(request, pk):
@@ -292,7 +300,7 @@ def delivery_details(request, pk):
     else:
         delivery = Delivery.objects.get(pk=pk)
         is_on_the_list = DriverWaitingList.objects.filter(driver=driver, delivery=delivery).exists()
-        return render(request, 'delivery_details.html', {"delivery": delivery, "is_on_the_list": is_on_the_list})
+        return render(request, 'delivery-details.html', {"delivery": delivery, "is_on_the_list": is_on_the_list})
 
 
 def register_account(request):
@@ -352,7 +360,7 @@ def register_account(request):
     else:
         reg_form = RegistrationForm()
         vehicle_form = VehicleForm()
-        return render(request, 'home_page.html', {"reg_form": reg_form, "vehicle_form": vehicle_form})
+        return render(request, 'home-page.html', {"reg_form": reg_form, "vehicle_form": vehicle_form})
 
 
 def login_client(request):

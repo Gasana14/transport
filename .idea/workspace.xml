@@ -19,13 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a21d2ad-5033-45cc-a23a-a1b8fba4ead4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/templates/delivery-edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/delivery-edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/templates/driver-profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/driver-profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/templates/login-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/login-page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="2a21d2ad-5033-45cc-a23a-a1b8fba4ead4" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

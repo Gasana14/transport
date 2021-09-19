@@ -136,9 +136,8 @@
                                 {% if forloop.counter < 3 %}
                                 <div class="tm-gray-circle"><img src="{% static 'customer-dashboard/img/notification-01.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
                                 <div class="media-body">
-                                    <p class="mb-2"><b>{{driver.account.first_name}}</b> and <b>6 others</b> sent you new <a href="#"
-                                            class="tm-notification-link">product updates</a>. Check new orders.</p>
-                                    <span class="tm-small tm-text-color-secondary">6h ago.</span>
+                                    <p class="mb-2"><a href="{% url 'driver_profile' reason='ASSIGN' driver_id=driver.pk  delivery_id=delivery.pk %}"><b>{{driver.account.last_name}} {{driver.account.first_name}}</b></a>  nkaba nifuza ko mwampa iki kiraka, nkaba nzakorana namwe neza murakoze.</p>
+                                    <span class="tm-small tm-text-color-secondary">more</span>
                                 </div>
                                  {% elif forloop.counter == 3 %}
                                 <h1>Abandi</h1>

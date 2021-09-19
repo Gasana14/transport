@@ -142,81 +142,124 @@
           </div>
         </div>
           <div class="col-12 tm-content-row " style="display:flex;">
-          <div class="col-6">
-             <div class="tm-bg-primary-dark tm-block tm-block-settings">
-              <h2 class="tm-block-title">Ibinyabiziga</h2>
-              <form  method="POST" action="{% url 'add_vehicle_or_delete' %}" class="tm-signup-form row">
-                {% csrf_token %}
-                <div class="form-group col-lg-12">
-                  <label for="pn">Pulake Y' Ikinyabiziga</label>
-                  <input id="pn" class="form-control" name="plate"  required class="form-control validate" />  </div>
+<!--          <div class="col-6">-->
+<!--&lt;!&ndash;             <div class="tm-bg-primary-dark tm-block tm-block-settings">&ndash;&gt;-->
+<!--&lt;!&ndash;              <h2 class="tm-block-title">Ibinyabiziga</h2>&ndash;&gt;-->
+<!--&lt;!&ndash;              <form  method="POST" action="{% url 'add_vehicle_or_delete' %}" class="tm-signup-form row">&ndash;&gt;-->
+<!--&lt;!&ndash;                {% csrf_token %}&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="form-group col-lg-12">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <label for="pn">Pulake Y' Ikinyabiziga</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                  <input id="pn" class="form-control" name="plate"  required class="form-control validate" />  </div>&ndash;&gt;-->
 
 
-                 <div class="form-group col-lg-6">
-                  <label for="ty">Ubwoko bw' Ikinyabiziga</label>
-                  <input id="ty" type="text" name="model"  required class="form-control validate" />  </div>
-                  <div class="form-group col-lg-6">
-                  <label for="phn">Ibiro Gipakira</label>
-                  <input type="number"   name="capacity" class="form-control"  required  placeholder="..."></div>
+<!--&lt;!&ndash;                 <div class="form-group col-lg-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <label for="ty">Ubwoko bw' Ikinyabiziga</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                  <input id="ty" type="text" name="model"  required class="form-control validate" />  </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                  <div class="form-group col-lg-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <label for="phn">Ibiro Gipakira</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                  <input type="number"   name="capacity" class="form-control"  required  placeholder="..."></div>&ndash;&gt;-->
 
 
-                <div class="form-group col-lg-12">
-                  <label class="tm-hide-sm">&nbsp;</label>
-                  <button type="submit" class="btn btn-primary btn-block text-uppercase" >OHEREZA</button>
+<!--&lt;!&ndash;                <div class="form-group col-lg-12">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <label class="tm-hide-sm">&nbsp;</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                  <button type="submit" class="btn btn-primary btn-block text-uppercase" >OHEREZA</button>&ndash;&gt;-->
 
-                </div>
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
 
-              </form>
-            </div>
+<!--&lt;!&ndash;              </form>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--          </div>-->
+            <div class="col-md-10" style="border: 1px solid white;margin-left:10%;">
+              <br>
+              <br>
+              <h3 style="text-align: center; text-transform: uppercase;">{{driver.account.first_name}}</h3>
+              <br>
+            <table style="width:100%;border-top:1px solid white;" cellpadding="20">
+                <tr style="height: 50px;">
+                  <td style="font-weight:bolder;color:white;">Amazina</th>
+                  <td style="font-weight:bolder;color:white;">{{driver.account.last_name}} {{driver.account.first_name}}</th>
+
+                </tr>
+
+                <tr style="height: 50px; ">
+                  <td style="font-weight:bolder;color:white;">Ibinyabiziga </td>
+                  <td style="font-weight:bolder;color:white;">{{driver.how_many_cars}}</td>
+
+                </tr>
+                <tr style="height: 50px;">
+                    <td style="font-weight:bolder;color:white;">Ubushobozi bwo kwikorera </td>
+                    <td style="font-weight:bolder;color:white;">{{driver.calculate_capacity}}</td>
+
+                  </tr>
+
+                <tr style="height: 50px;">
+                  <td style="font-weight:bolder;color:white;">Telephone</td>
+                  <td style="font-weight:bolder;color:white;">{{driver.phone}} </td>
+
+                </tr>
+                <tr style="height: 50px;">
+
+                    <td>
+                    <form method="POST" action="{% url 'accept_request' driver_id=driver.pk delivery_id=delivery.pk %}">
+                       {% csrf_token %}
+                        <div class="action_buttons">
+                            <!-- <a class="auth_button_vaigation" id="customer_login_button" >Injira muri konti</a> -->
+                            <button type="submit" class="btn btn-primary btn-block text-uppercase" id="customer_register_button_two">EMEZA UBUSABE</button>
+                        </div>
+                    </form>
+                    </td>
+                    <td></td>
+                  </tr>
+              </table>
           </div>
-          <div class="col-6">
-            <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Ikiranga</th>
-                                    <th scope="col">Ibiro</th>
-                                    <th scope="col">Shoferi</th>
-                                    <th scope="col">Igikorwa</th>
+<!--          <div class="col-6">-->
+<!--            <table class="table">-->
+<!--                            <thead>-->
+<!--                                <tr>-->
+<!--                                    <th scope="col">Ikiranga</th>-->
+<!--                                    <th scope="col">Ibiro</th>-->
+<!--                                    <th scope="col">Shoferi</th>-->
+<!--                                    <th scope="col">Igikorwa</th>-->
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for vehicle in vehicles %}
-                             {% if vehicles|length == 1 %}
-                            <form method="GET" action="{% url 'add_vehicle_or_delete' %}">
-                                 {% csrf_token %}
-                                <tr>
-                                    <td>{{vehicle.plate}} </td>
-                                    <td>{{vehicle.capacity}} Kg</td>
-                                    <td>{{vehicle.driver.account.first_name}} {{vehicle.driver.account.last_name}} </td>
-                                    <td><button type="submit" class="btn btn-danger">Siba</button></td>
-                                    <input type="text" name="plate_delete" value="{{vehicle.plate}}" hidden>
-                                    <input type="number" name="capacity_delete" value="{{vehicle.capacity}}" hidden>
-                                    <input type="text" name="model_delete" value="{{vehicle.model}}" hidden>
-                                </tr>
-                            </form>
-                            {% else %}
-                             <form method="GET" action="{% url 'add_vehicle_or_delete' %}">
-                                   {% csrf_token %}
-                                <tr>
-                                    <td>{{vehicle.plate}} </td>
-                                    <td>{{vehicle.capacity}} Kg</td>
+<!--                                </tr>-->
+<!--                            </thead>-->
+<!--                            <tbody>-->
+<!--                            {% for vehicle in vehicles %}-->
+<!--                             {% if vehicles|length == 1 %}-->
+<!--                            <form method="GET" action="{% url 'add_vehicle_or_delete' %}">-->
+<!--                                 {% csrf_token %}-->
+<!--                                <tr>-->
+<!--                                    <td>{{vehicle.plate}} </td>-->
+<!--                                    <td>{{vehicle.capacity}} Kg</td>-->
+<!--                                    <td>{{vehicle.driver.account.first_name}} {{vehicle.driver.account.last_name}} </td>-->
+<!--                                    <td><button type="submit" class="btn btn-danger">Siba</button></td>-->
+<!--                                    <input type="text" name="plate_delete" value="{{vehicle.plate}}" hidden>-->
+<!--                                    <input type="number" name="capacity_delete" value="{{vehicle.capacity}}" hidden>-->
+<!--                                    <input type="text" name="model_delete" value="{{vehicle.model}}" hidden>-->
+<!--                                </tr>-->
+<!--                            </form>-->
+<!--                            {% else %}-->
+<!--                             <form method="GET" action="{% url 'add_vehicle_or_delete' %}">-->
+<!--                                   {% csrf_token %}-->
+<!--                                <tr>-->
+<!--                                    <td>{{vehicle.plate}} </td>-->
+<!--                                    <td>{{vehicle.capacity}} Kg</td>-->
 
-                                     <td>{{vehicle.driver.account.first_name}} {{vehicle.driver.account.last_name}} </td>
+<!--                                     <td>{{vehicle.driver.account.first_name}} {{vehicle.driver.account.last_name}} </td>-->
 
 
-                                    <td><button type="submit" class="btn btn-danger">Siba</button></td>
-                                    <input type="text" name="plate_delete" value="{{vehicle.plate}}" hidden>
-                                    <input type="number" name="capacity_delete" value="{{vehicle.capacity}}" hidden>
-                                    <input type="text" name="model_delete" value="{{vehicle.model}}" hidden>
+<!--                                    <td><button type="submit" class="btn btn-danger">Siba</button></td>-->
+<!--                                    <input type="text" name="plate_delete" value="{{vehicle.plate}}" hidden>-->
+<!--                                    <input type="number" name="capacity_delete" value="{{vehicle.capacity}}" hidden>-->
+<!--                                    <input type="text" name="model_delete" value="{{vehicle.model}}" hidden>-->
 
-                                </tr>
-                               </form>
-                            {% endif %}
-                            {% endfor %}
-                            </tbody>
-                        </table>
-          </div>
+<!--                                </tr>-->
+<!--                               </form>-->
+<!--                            {% endif %}-->
+<!--                            {% endfor %}-->
+<!--                            </tbody>-->
+<!--                        </table>-->
+<!--          </div>-->
         </div>
 
       </div>

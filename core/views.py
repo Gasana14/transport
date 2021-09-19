@@ -118,7 +118,7 @@ def accept_request(request, delivery_id, driver_id):
         delivery.driver = driver
         delivery.status = 'I'
         delivery.save()
-        return redirect('delivery-edit', pk=delivery_id)
+        return redirect('delivery_edit', pk=delivery_id)
 
 
 @login_required()
@@ -130,9 +130,9 @@ def driver_profile(request, reason, driver_id, delivery_id):
         if reason == 'ASSIGN':
             alert_users([delivery], request)
             messages.warning(request, "Waba koko wifuza gutanga ikiraka? Ohereza iyi form. Niba utabyifuza subira inyuma.")
-            return render(request, 'driver_profile.html', {"reason": "ASSIGN", "driver": driver, "delivery": delivery})
+            return render(request, 'driver-profile.html', {"reason": "ASSIGN", "driver": driver, "delivery": delivery})
         else:
-            return render(request, 'driver_profile.html', {"reason": "VIEW", "driver": driver})
+            return render(request, 'driver-profile.html', {"reason": "VIEW", "driver": driver})
     elif Driver.objects.filter(account=user).exists():
         if reason == 'Edit':
             return render(request, 'driver_profile.html', {"reason": "EDIT", "driver": driver})

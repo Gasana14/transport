@@ -20,21 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a21d2ad-5033-45cc-a23a-a1b8fba4ead4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/core/templates/assigned-mission.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/templates/customer-profile.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/templates/delivery-details.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/templates/delivery-edit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/templates/driver-auth.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/templates/driver-dashboard.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/templates/driver-missions.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/templates/driver-profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/templates/home_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/home_page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/delivery-edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/delivery-edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/driver-profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/driver-profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/login-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/login-page.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transport_system/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/transport_system/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
